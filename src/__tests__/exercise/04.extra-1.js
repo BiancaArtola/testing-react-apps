@@ -7,8 +7,7 @@ import userEvent from '@testing-library/user-event'
 import Login from '../../components/login'
 
 test('submitting the form calls onSubmit with username and password', async () => {
-  let submittedData
-  const handleSubmit = data => (submittedData = data)
+  const handleSubmit = jest.fn()
   render(<Login onSubmit={handleSubmit} />)
 
   const username = 'chucknorris'
@@ -18,10 +17,11 @@ test('submitting the form calls onSubmit with username and password', async () =
   await userEvent.type(screen.getByLabelText(/Password/i), password)
   await userEvent.click(screen.getByRole('button', {name: /submit/i}))
 
-  expect(submittedData).toEqual({
+  expect(handleSubmit).toHaveBeenCalledWith({
     username: username,
     password: password,
   })
+  expect(handleSubmit).toHaveBeenCalledTimes(1)
 })
 
 /*
